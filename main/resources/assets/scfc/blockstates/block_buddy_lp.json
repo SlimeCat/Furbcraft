@@ -1,0 +1,7 @@
+{"variants":
+	{"facing=south": { "model": "scfc:block_buddy_lp" },
+    "facing=north": { "model": "scfc:block_buddy_lp", "y": 180 },
+    "facing=east":  { "model": "scfc:block_buddy_lp", "y": 270 },
+    "facing=west":  { "model": "scfc:block_buddy_lp", "y": 90 }
+	}
+}

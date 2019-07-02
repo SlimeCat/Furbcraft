@@ -1,0 +1,18 @@
+{"__comment": "This table is injected as its own pool into minecraft:chests/end_city_treasure",
+"pools": 
+	[
+		{"name": "main",
+		"rolls": 1,
+		"entries": 
+			[
+				{"type": "block",
+				"name": "scfc:block_buddy_kc",
+				"weight": 50
+				},
+				{"type": "empty",
+				"weight": 50
+				}
+			]
+		}
+	]
+}

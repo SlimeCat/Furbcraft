@@ -1,0 +1,44 @@
+{
+    "type": "minecraft:crafting_shaped",
+    
+    "pattern":
+    [
+        "GPB",
+        "BLG",
+        "OPO"
+    ],
+    
+    "key":
+    {
+        "L":
+        {
+            "item": "scfc:furby_love"
+        },
+        "B":
+        {
+            "item": "minecraft:wool",
+            "data": 15
+        },
+        "P":
+        {
+            "item": "minecraft:wool",
+            "data": 6
+        },
+        "O":
+        {
+            "item": "minecraft:wool",
+            "data": 1
+        },
+        "G":
+        {
+            "item": "minecraft:wool",
+            "data": 8
+        }
+    },
+    
+    "result":
+    {
+        "item": "scfc:lp_furby_buddy",
+        "count": 1
+    }
+}

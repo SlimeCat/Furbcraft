@@ -1,0 +1,38 @@
+{"__comment": "This table is injected as its own pool into minecraft:chests/simple_dungeon",
+"pools": 
+	[
+		{"name": "main",
+		"rolls": 1,
+		"entries": 
+			[
+				{"type": "block",
+				"name": "scfc:block_buddy_cm",
+				"weight": 10
+				},
+				{"type": "block",
+				"name": "scfc:block_buddy_wc",
+				"weight": 10
+				},
+				{"type": "block",
+				"name": "scfc:block_buddy_wf",
+				"weight": 10
+				},
+				{"type": "block",
+				"name": "scfc:block_buddy_sk",
+				"weight": 10
+				},
+				{"type": "block",
+				"name": "scfc:block_buddy_sb",
+				"weight": 10
+				},
+				{"type": "block",
+				"name": "scfc:block_buddy_lp",
+				"weight": 10
+				},
+				{"type": "empty",
+				"weight": 40
+				}
+			]
+		}
+	]
+}

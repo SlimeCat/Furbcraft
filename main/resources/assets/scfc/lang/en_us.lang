@@ -1,0 +1,15 @@
+//CREATIVE TABS
+itemGroup.furbcraft=Furbcraft
+
+//ITEMS
+item.furby_love.name=Furby Love
+item.furby_tear.name=Furby Tear
+
+//BLOCKS
+tile.block_buddy_cm.name=Furby Buddy (Church Mouse)
+tile.block_buddy_wc.name=Furby Buddy (Witches Cat)
+tile.block_buddy_lp.name=Furby Buddy (Leopard)
+tile.block_buddy_sk.name=Furby Buddy (Skunk)
+tile.block_buddy_sb.name=Furby Buddy (Snowball)
+tile.block_buddy_wf.name=Furby Buddy (Wolf)
+tile.block_buddy_kc.name=Furby Buddy (Kid Cuisine)
