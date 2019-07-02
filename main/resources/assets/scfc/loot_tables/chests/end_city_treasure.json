@@ -7,10 +7,10 @@
 			[
 				{"type": "block",
 				"name": "scfc:block_buddy_kc",
-				"weight": 50
+				"weight": 1
 				},
 				{"type": "empty",
-				"weight": 50
+				"weight": 99
 				}
 			]
 		}
