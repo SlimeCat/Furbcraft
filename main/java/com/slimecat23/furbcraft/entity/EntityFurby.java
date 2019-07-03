@@ -101,8 +101,6 @@ public class EntityFurby extends EntityTameable
 		pet_timer= 0;
 		item_timer= this.rand.nextInt(600) + 600;
 		spawn_biome= null;
-		skin= RenderFurby.CHURCH_MOUSE;
-		model= RenderFurby.MANE;
 		}
 	
 	
@@ -176,7 +174,7 @@ public class EntityFurby extends EntityTameable
 	    super.entityInit();
 	    this.dataManager.register(DATA_HEALTH_ID, Float.valueOf(this.getHealth()));
 	    this.dataManager.register(EYE_COLOR, Integer.valueOf(EnumDyeColor.YELLOW.getDyeDamage()));
-	    this.dataManager.register(SPAWN, Biome.getIdForBiome(Biomes.PLAINS));
+	    this.dataManager.register(SPAWN, -1);
 	    this.dataManager.register(SKIN, "church_mouse");
 	    }
 	
@@ -331,12 +329,14 @@ public class EntityFurby extends EntityTameable
 	public void onLivingUpdate()
     	{//Update
         super.onLivingUpdate();
-        if (spawn_biome== null && !world.isRemote)
-			{setSpawnBiome(getEntityWorld().getBiome(getPosition()));
+        if (spawn_biome== null)
+			{if (dataManager.get(SPAWN)== -1)
+        		{setSpawnBiome(getEntityWorld().getBiome(getPosition()));
+        		}
+			else
+				{loadData();
+				}
 			}
-        else if (spawn_biome== null)
-        	{loadData();
-        	}
         if (this.isTamed())
 	        {if (!this.world.isRemote && !this.isChild() && --this.item_timer<= 0)
 	        	{if (happiness>= 80)
@@ -449,9 +449,6 @@ public class EntityFurby extends EntityTameable
     	{//Set eye colour
     	if (_color!= null)
     		{dataManager.set(EYE_COLOR, Integer.valueOf(_color.getDyeDamage()));
-    		}
-    	else
-    		{System.out.println("Null color passed!");
     		}
     	}
 	}
