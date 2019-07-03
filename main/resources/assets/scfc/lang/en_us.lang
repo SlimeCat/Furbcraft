@@ -15,5 +15,5 @@ tile.block_buddy_wf.name=Furby Buddy (Wolf)
 tile.block_buddy_kc.name=Furby Buddy (Kid Cuisine)
 
 //ENTITY
-entity.furby.name= Furby
-entity.rare_furby.name= Kid Cuisine Furby
+entity.furby.name=Furby
+entity.rare_furby.name=Kid Cuisine Furby

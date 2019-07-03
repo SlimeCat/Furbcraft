@@ -15,6 +15,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class LayerFurbyEye implements LayerRenderer<EntityFurby>
 	{private static final ResourceLocation FURBY_EYE= new ResourceLocation(Reference.MOD_ID + ":textures/entity/furby_eye.png");
 	private static final ResourceLocation FURBY_EYE_SAD= new ResourceLocation(Reference.MOD_ID + ":textures/entity/furby_eye_sad.png");
+	private static final ResourceLocation SKINLESS_EYE= new ResourceLocation(Reference.MOD_ID + ":textures/entity/skinless_eye.png");
+	private static final ResourceLocation SKINLESS_EYE_SAD= new ResourceLocation(Reference.MOD_ID + ":textures/entity/skinless_eye_sad.png");
 	private final RenderFurby furby_render;
 
     public LayerFurbyEye(RenderFurby _render)
@@ -24,10 +26,20 @@ public class LayerFurbyEye implements LayerRenderer<EntityFurby>
     public void doRenderLayer(EntityFurby _entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale)
     	{if (!_entity.isInvisible())
         	{if (_entity.happiness> 30)
-        		{this.furby_render.bindTexture(FURBY_EYE);
+        		{if (_entity.skin== RenderFurby.SKINLESS)
+        			{this.furby_render.bindTexture(SKINLESS_EYE);
+        			}
+        		else
+        			{this.furby_render.bindTexture(FURBY_EYE);
+        			}
         		}
         	else
-        		{this.furby_render.bindTexture(FURBY_EYE_SAD);
+        		{if (_entity.skin== RenderFurby.SKINLESS)
+	    			{this.furby_render.bindTexture(SKINLESS_EYE_SAD);
+	    			}
+	    		else
+	    			{this.furby_render.bindTexture(FURBY_EYE_SAD);
+	    			}
         		}
             float[] afloat= _entity.getEyeColor().getColorComponentValues();
             GlStateManager.color(afloat[0], afloat[1], afloat[2]);

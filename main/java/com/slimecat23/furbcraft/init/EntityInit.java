@@ -20,7 +20,7 @@ import scala.actors.threadpool.Arrays;
 public class EntityInit 
 	{//VARIABLES
 	//static Biome[] all_biomes= (Biome[]) ForgeRegistries.BIOMES.getValuesCollection().toArray();
-	static Biome[] TERRA= new Biome[] {Biomes.BEACH, Biomes.BIRCH_FOREST, Biomes.BIRCH_FOREST_HILLS, Biomes.COLD_BEACH, Biomes.COLD_TAIGA, Biomes.COLD_TAIGA_HILLS, Biomes.DESERT, Biomes.DESERT_HILLS, Biomes.EXTREME_HILLS, Biomes.EXTREME_HILLS_EDGE, Biomes.EXTREME_HILLS_WITH_TREES, Biomes.FOREST, Biomes.FOREST_HILLS, Biomes.HELL, Biomes.ICE_PLAINS, Biomes.ICE_MOUNTAINS, Biomes.MESA, Biomes.MESA_ROCK, Biomes.MUSHROOM_ISLAND, Biomes.PLAINS, Biomes.REDWOOD_TAIGA, Biomes.REDWOOD_TAIGA_HILLS, Biomes.ROOFED_FOREST, Biomes.SAVANNA, Biomes.SAVANNA_PLATEAU, Biomes.STONE_BEACH, Biomes.TAIGA, Biomes.TAIGA_HILLS};
+	static Biome[] TERRA= new Biome[] {Biomes.BEACH, Biomes.BIRCH_FOREST, Biomes.BIRCH_FOREST_HILLS, Biomes.COLD_BEACH, Biomes.COLD_TAIGA, Biomes.COLD_TAIGA_HILLS, Biomes.DESERT, Biomes.DESERT_HILLS, Biomes.EXTREME_HILLS, Biomes.EXTREME_HILLS_EDGE, Biomes.EXTREME_HILLS_WITH_TREES, Biomes.FOREST, Biomes.FOREST_HILLS, Biomes.HELL, Biomes.ICE_PLAINS, Biomes.ICE_MOUNTAINS, Biomes.MESA, Biomes.MESA_ROCK, Biomes.MUSHROOM_ISLAND, Biomes.PLAINS, Biomes.REDWOOD_TAIGA, Biomes.REDWOOD_TAIGA_HILLS, Biomes.ROOFED_FOREST, Biomes.SAVANNA, Biomes.SAVANNA_PLATEAU, Biomes.STONE_BEACH, Biomes.TAIGA, Biomes.TAIGA_HILLS, Biomes.SWAMPLAND};
 	
 	
 	//METHODS

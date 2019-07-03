@@ -1,8 +1,9 @@
 {"parent": "block/block",
     "__comment": "Model generated using MrCrayfish's Model Creator (https://mrcrayfish.com/tools?id=mc)",
-    "textures": {
-        "skin": "scfc:blocks/block_buddy_wc"
-    },
+    "textures": 
+		{"skin": "scfc:blocks/block_buddy_wc",
+		"particle": "scfc:items/block_buddy_wc"
+		},
 
     "elements": [
         {

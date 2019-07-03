@@ -221,6 +221,7 @@ public class EntityFurby extends EntityTameable
     public boolean processInteract(EntityPlayer _player, EnumHand _hand)
     	{//Player interaction
         ItemStack itemstack= _player.getHeldItem(_hand);
+        System.out.println(spawn_biome+ " vs "+ Biomes.HELL);
         if (this.isTamed())
         	{interact_timer= 1800;
         	if (itemstack.isEmpty() && _player.isSneaking() && pet_timer== 0)
