@@ -77,6 +77,7 @@ public class EntityFurby extends EntityTameable
 	public int weight_timer;
 	public int hunger_timer;
 	public int pet_timer;
+	public int interact_timer;
 	public Biome spawn_biome;
 	public ResourceLocation skin;
 	public ModelBase model;
@@ -96,8 +97,9 @@ public class EntityFurby extends EntityTameable
 		happy_timer= 1000;
 		hunger_timer= 1000;
 		weight_timer= 100;
+		interact_timer= 1800;
 		pet_timer= 0;
-		item_timer= this.rand.nextInt(6000) + 6000;
+		item_timer= this.rand.nextInt(600) + 600;
 		spawn_biome= null;
 		skin= RenderFurby.CHURCH_MOUSE;
 		model= RenderFurby.MANE;
@@ -220,10 +222,12 @@ public class EntityFurby extends EntityTameable
     	{//Player interaction
         ItemStack itemstack= _player.getHeldItem(_hand);
         if (this.isTamed())
-        	{if (!itemstack.isEmpty() && _player.isSneaking() && pet_timer== 0)
+        	{interact_timer= 1800;
+        	if (!itemstack.isEmpty() && _player.isSneaking() && pet_timer== 0)
         		{happiness+= 10;
         		weight-= 5;
         		pet_timer= 600;
+        		this.playTameEffect(true);
         		}
         	if (!itemstack.isEmpty() && hunger!= 100)
         		{if (Arrays.asList(Reference.PLANTS).contains(itemstack.getItem()))
@@ -343,7 +347,7 @@ public class EntityFurby extends EntityTameable
 	        		{this.playSound(SoundEvents.ENTITY_CHICKEN_EGG, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
 	        		this.dropItem(ItemInit.FURBY_TEAR, 1);
 	        		}
-	            this.item_timer= this.rand.nextInt(6000) + 6000;
+	            this.item_timer= this.rand.nextInt(600) + 600;
 	        	}
 	        if (!this.world.isRemote && !this.isChild() && --this.hunger_timer<= 0)
 		    	{hunger--;
@@ -353,7 +357,9 @@ public class EntityFurby extends EntityTameable
 		    	hunger_timer= 36;
 		    	}
 	        if (!this.world.isRemote && !this.isChild() && --this.happy_timer<= 0)
-		    	{happiness--;
+		    	{if (--interact_timer<= 0)
+		    		{happiness--;
+		    		}
 		    	if (hunger< 20)
 		    		{happiness-= 4;
 		    		weight-= 5;
