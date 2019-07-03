@@ -5,7 +5,7 @@
 		"rolls": 1,
 		"entries": 
 			[
-				{"type": "block",
+				{"type": "item",
 				"name": "scfc:block_buddy_kc",
 				"weight": 1
 				},

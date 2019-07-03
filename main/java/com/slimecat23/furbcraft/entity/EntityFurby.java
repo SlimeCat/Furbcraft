@@ -5,11 +5,13 @@ import java.util.Arrays;
 import javax.annotation.Nullable;
 
 import com.google.common.base.Predicate;
+import com.slimecat23.furbcraft.Main;
 import com.slimecat23.furbcraft.entity.render.RenderFurby;
 import com.slimecat23.furbcraft.init.ItemInit;
 import com.slimecat23.furbcraft.util.Reference;
 
 import net.minecraft.client.model.ModelBase;
+import net.minecraft.dispenser.IPosition;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLivingBase;
@@ -31,6 +33,7 @@ import net.minecraft.entity.ai.EntityAITempt;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.AbstractSkeleton;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityChicken;
@@ -41,6 +44,7 @@ import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
@@ -53,9 +57,11 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -70,12 +76,15 @@ public class EntityFurby extends EntityTameable
 	public int happy_timer;
 	public int weight_timer;
 	public int hunger_timer;
+	public int pet_timer;
 	public Biome spawn_biome;
 	public ResourceLocation skin;
 	public ModelBase model;
 	private static final DataParameter<Float> DATA_HEALTH_ID= EntityDataManager.<Float>createKey(EntityFurby.class, DataSerializers.FLOAT);
     private static final DataParameter<Integer> EYE_COLOR= EntityDataManager.<Integer>createKey(EntityFurby.class, DataSerializers.VARINT);
-	
+    private static final DataParameter<Integer> SPAWN= EntityDataManager.<Integer>createKey(EntityFurby.class, DataSerializers.VARINT);
+    private static final DataParameter<String> SKIN= EntityDataManager.<String>createKey(EntityFurby.class, DataSerializers.STRING);
+    
 	
 	//CONSTRUTOR
 	public EntityFurby(World _world) 
@@ -87,14 +96,45 @@ public class EntityFurby extends EntityTameable
 		happy_timer= 1000;
 		hunger_timer= 1000;
 		weight_timer= 100;
+		pet_timer= 0;
 		item_timer= this.rand.nextInt(6000) + 6000;
-		spawn_biome= _world.getBiome(getPosition());
-		skin= null;
-		model= RenderFurby.SKIN;
+		spawn_biome= null;
+		skin= RenderFurby.CHURCH_MOUSE;
+		model= RenderFurby.MANE;
 		}
 	
 	
 	//METHODS
+	public void setSpawnBiome(Biome _biome)
+		{spawn_biome= _biome;
+		if (RenderFurby.TEXTURES.containsKey(spawn_biome))
+			{skin= RenderFurby.TEXTURES.get(spawn_biome).get(Reference.random.nextInt(RenderFurby.TEXTURES.get(spawn_biome).size()));
+			}
+		else
+			{skin= RenderFurby.CHURCH_MOUSE;
+			}
+		setModel();
+		saveData();
+		}
+	
+	public void setModel()
+		{model= RenderFurby.MODELS.get(skin);
+		if (!isTamed())
+			{setEyeColor(RenderFurby.EYES.get(skin));
+			}
+		}
+	
+	public void saveData()
+		{dataManager.set(SPAWN, Biome.getIdForBiome(spawn_biome));
+		dataManager.set(SKIN, skin.toString());
+		}
+	
+	public void loadData()
+		{skin= new ResourceLocation(dataManager.get(SKIN));
+		spawn_biome= Biome.getBiomeForId(dataManager.get(SPAWN));
+		setModel();
+		}
+	
 		//overrides
 	@Override
 	protected void initEntityAI()
@@ -134,14 +174,17 @@ public class EntityFurby extends EntityTameable
 	    super.entityInit();
 	    this.dataManager.register(DATA_HEALTH_ID, Float.valueOf(this.getHealth()));
 	    this.dataManager.register(EYE_COLOR, Integer.valueOf(EnumDyeColor.YELLOW.getDyeDamage()));
+	    this.dataManager.register(SPAWN, Biome.getIdForBiome(Biomes.PLAINS));
+	    this.dataManager.register(SKIN, "scfc:textures/enitity/church_mouse.png");
 	    }
 	
 	@Override
 	public void writeEntityToNBT(NBTTagCompound _compound)
 	    {//Save NBT
-	    super.writeEntityToNBT(_compound);
+		super.writeEntityToNBT(_compound);
 	    _compound.setByte("EyeColor", (byte)this.getEyeColor().getDyeDamage());
-	    _compound.setString("Skin", this.skin.getResourcePath());
+	    _compound.setString("Skin", dataManager.get(SKIN));
+	    _compound.setInteger("Biome", dataManager.get(SPAWN));
 	    }
 
 	@Override
@@ -149,11 +192,15 @@ public class EntityFurby extends EntityTameable
 	    {//Load NBT
 	    super.readEntityFromNBT(_compound);
 	    if (_compound.hasKey("EyeColor", 99))
-	        {this.setEyeColor(EnumDyeColor.byDyeDamage(_compound.getByte("CollarColor")));
+	        {this.setEyeColor(EnumDyeColor.byDyeDamage(_compound.getByte("EyeColor")));
 	        }
 	    if (_compound.hasKey("Skin"))
-	        {this.skin= new ResourceLocation(_compound.getString("Skin"));
+	        {dataManager.set(SKIN, _compound.getString("Skin"));
 	        }
+	    if (_compound.hasKey("Biome", 99))
+	        {dataManager.set(SPAWN, _compound.getInteger("Biome"));
+	        }
+	    loadData();
 	    }
 	
 	@Override
@@ -173,24 +220,27 @@ public class EntityFurby extends EntityTameable
     	{//Player interaction
         ItemStack itemstack= _player.getHeldItem(_hand);
         if (this.isTamed())
-        	{if (!itemstack.isEmpty())
+        	{if (!itemstack.isEmpty() && _player.isSneaking() && pet_timer== 0)
+        		{happiness+= 10;
+        		weight-= 5;
+        		pet_timer= 600;
+        		}
+        	if (!itemstack.isEmpty() && hunger!= 100)
         		{if (Arrays.asList(Reference.PLANTS).contains(itemstack.getItem()))
                 	{//Feed to heal
-        			if (((Float) this.dataManager.get(DATA_HEALTH_ID)).floatValue()< 15.0F)
-                    	{if (!_player.capabilities.isCreativeMode)
-                        	{itemstack.shrink(1);
-                        	}
-                        this.heal(5.0f);
-                        hunger+= 20;
-                        if (hunger> 100)
-                        	{hunger= 100;
-                        	weight+= 5;
-                        	if (weight> 100)
-	                        	{weight= 100;
-	                            }
-                        	}
-                        return true;
+        			if (!_player.capabilities.isCreativeMode)
+                    	{itemstack.shrink(1);
                     	}
+                    this.heal(5.0f);
+                    hunger+= 20;
+                    if (hunger> 100)
+                    	{hunger= 100;
+                    	weight+= 5;
+                    	if (weight> 100)
+                        	{weight= 100;
+                            }
+                    	}
+                    return true;
                 	}
                 else if (Arrays.asList(Reference.SWEETS).contains(itemstack.getItem()))
                 	{//Feed to gain happiness
@@ -277,6 +327,12 @@ public class EntityFurby extends EntityTameable
 	public void onLivingUpdate()
     	{//Update
         super.onLivingUpdate();
+        if (spawn_biome== null && !world.isRemote)
+			{setSpawnBiome(getEntityWorld().getBiome(getPosition()));
+			}
+        else if (spawn_biome== null)
+        	{loadData();
+        	}
         if (this.isTamed())
 	        {if (!this.world.isRemote && !this.isChild() && --this.item_timer<= 0)
 	        	{if (happiness>= 80)
@@ -288,10 +344,6 @@ public class EntityFurby extends EntityTameable
 	        		this.dropItem(ItemInit.FURBY_TEAR, 1);
 	        		}
 	            this.item_timer= this.rand.nextInt(6000) + 6000;
-	        	}
-	        if (!this.world.isRemote && !this.isChild() && --this.weight_timer<= 0 && weight> 80)
-	        	{this.damageEntity(DamageSource.GENERIC, 1);
-	        	weight_timer= 10;
 	        	}
 	        if (!this.world.isRemote && !this.isChild() && --this.hunger_timer<= 0)
 		    	{hunger--;
@@ -306,11 +358,17 @@ public class EntityFurby extends EntityTameable
 		    		{happiness-= 4;
 		    		weight-= 5;
 		    		}
+		    	if (weight> 80)
+		    		{happiness--;
+		    		}
 		    	if (happiness< 0)
 		    		{happiness= 0;
 		    		}
 		    	happy_timer= 72;
 		    	}
+	        if (pet_timer> 0)
+	        	{pet_timer--;
+	        	}
 	        }
     	}
 	
@@ -320,17 +378,43 @@ public class EntityFurby extends EntityTameable
         if (this.isEntityInvulnerable(source))
         	{return false;
         	}
-        else
-	        {Entity entity= source.getTrueSource();
-	        if (this.aiSit != null)
-	            {this.aiSit.setSitting(false);
-	            }
-	        if (Reference.random.nextInt(100)< 25)
-	        	{this.dropItem(ItemInit.FURBY_TEAR, 1);
+        else if (source.getTrueSource() instanceof EntityPlayer)
+	        {if (getEntityWorld().getWorldInfo().getWorldName()!= "MpServer" && Reference.random.nextInt(100)< 25)
+	        	{cry(getEntityWorld(), new ItemStack(ItemInit.FURBY_TEAR, 1), 1, getHorizontalFacing(), getPosition());
+	        	}
+	        if (happiness> 30)
+	        	{happiness= 30;
 	        	}
 	        return super.attackEntityFrom(source, amount);
 	        }
+        else
+        	{return super.attackEntityFrom(source, amount);
+        	}
+        
     	}
+	
+	 public void cry(World worldIn, ItemStack stack, int speed, EnumFacing facing, BlockPos position)
+	 	{double d0= position.getX();
+        double d1= position.getY();
+        double d2= position.getZ();
+
+        if (facing.getAxis()== EnumFacing.Axis.Y)
+        	{d1 = d1 - 0.125D;
+        	}
+        else
+        	{d1 = d1 - 0.15625D;
+        	}
+
+        EntityItem entityitem= new EntityItem(worldIn, d0, d1, d2, stack);
+        double d3= worldIn.rand.nextDouble() * 0.1D + 0.2D;
+        entityitem.motionX= (double)facing.getFrontOffsetX() * d3;
+        entityitem.motionY= 0.20000000298023224D;
+        entityitem.motionZ= (double)facing.getFrontOffsetZ() * d3;
+        entityitem.motionX+= worldIn.rand.nextGaussian() * 0.007499999832361937D * (double)speed;
+        entityitem.motionY+= worldIn.rand.nextGaussian() * 0.007499999832361937D * (double)speed;
+        entityitem.motionZ+= worldIn.rand.nextGaussian() * 0.007499999832361937D * (double)speed;
+        worldIn.spawnEntity(entityitem);
+	    }
 	
 	@Override
 	protected SoundEvent getAmbientSound() 
@@ -357,6 +441,6 @@ public class EntityFurby extends EntityTameable
 
     public void setEyeColor(EnumDyeColor _color)
     	{//Set eye colour
-        this.dataManager.set(EYE_COLOR, Integer.valueOf(_color.getDyeDamage()));
+    	dataManager.set(EYE_COLOR, Integer.valueOf(_color.getDyeDamage()));
     	}
 	}

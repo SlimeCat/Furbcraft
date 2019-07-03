@@ -1,0 +1,29 @@
+{
+    "type": "minecraft:crafting_shaped",
+    
+    "pattern":
+    [
+        "WWW",
+        "WLW",
+        "WWW"
+    ],
+    
+    "key":
+    {
+        "L":
+        {
+            "item": "scfc:furby_love"
+        },
+        "W":
+        {
+            "item": "minecraft:wool",
+            "data": 0
+        }
+    },
+    
+    "result":
+    {
+        "item": "scfc:block_buddy_sb",
+        "count": 1
+    }
+}

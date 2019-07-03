@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.layers.LayerWolfCollar;
 import net.minecraft.init.Biomes;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
@@ -42,6 +43,7 @@ public class RenderFurby extends RenderLiving<EntityFurby>
 		//biome based skin selector
 	public static final HashMap<Biome, ArrayList<ResourceLocation>> TEXTURES= new HashMap<Biome, ArrayList<ResourceLocation>>();
 	public static final HashMap<ResourceLocation, ModelBase> MODELS= new HashMap<ResourceLocation, ModelBase>();
+	public static final HashMap<ResourceLocation, EnumDyeColor> EYES= new HashMap<ResourceLocation, EnumDyeColor>();
 	public ResourceLocation skin;
 	
 	
@@ -58,6 +60,15 @@ public class RenderFurby extends RenderLiving<EntityFurby>
 		MODELS.put(SKUNK, MANE);
 		MODELS.put(WOLF, MANE);
 		MODELS.put(SKINLESS, SKIN);
+		//eye hash filling
+		EYES.put(SNOWBALL, EnumDyeColor.LIGHT_BLUE);
+		EYES.put(LEOPARD, EnumDyeColor.BROWN);
+		EYES.put(WITCHES_CAT, EnumDyeColor.GREEN);
+		EYES.put(KC, EnumDyeColor.GRAY);
+		EYES.put(CHURCH_MOUSE, EnumDyeColor.LIGHT_BLUE);
+		EYES.put(SKUNK, EnumDyeColor.WHITE);
+		EYES.put(WOLF, EnumDyeColor.GREEN);
+		EYES.put(SKINLESS, EnumDyeColor.LIME);
 		//biome hash filling
 		ArrayList resources= new ArrayList<ResourceLocation>();
 		//plains
@@ -184,17 +195,7 @@ public class RenderFurby extends RenderLiving<EntityFurby>
 	@Override
 	protected ResourceLocation getEntityTexture(EntityFurby _entity)
 		{if (_entity!= null)
-			{if (_entity.skin== null)
-				{_entity.spawn_biome= _entity.getEntityWorld().getBiome(_entity.getPosition());
-				if (TEXTURES.containsKey(_entity.spawn_biome))
-					{_entity.skin= TEXTURES.get(_entity.spawn_biome).get(Reference.random.nextInt(TEXTURES.get(_entity.spawn_biome).size()));
-					}
-				else
-					{_entity.skin= CHURCH_MOUSE;
-					}
-				_entity.model= MODELS.get(_entity.skin);
-				}
-			return _entity.skin;
+			{return _entity.skin;
 			}
 		return null;
 		}
