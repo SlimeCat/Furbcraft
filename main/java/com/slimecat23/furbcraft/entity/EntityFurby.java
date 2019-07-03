@@ -221,7 +221,7 @@ public class EntityFurby extends EntityTameable
         ItemStack itemstack= _player.getHeldItem(_hand);
         if (this.isTamed())
         	{interact_timer= 1800;
-        	if (!itemstack.isEmpty() && _player.isSneaking() && pet_timer== 0)
+        	if (itemstack.isEmpty() && _player.isSneaking() && pet_timer== 0)
         		{happiness+= 10;
         		weight-= 5;
         		pet_timer= 600;
