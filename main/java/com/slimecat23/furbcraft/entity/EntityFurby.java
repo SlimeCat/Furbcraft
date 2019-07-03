@@ -115,8 +115,8 @@ public class EntityFurby extends EntityTameable
 		else
 			{skin= RenderFurby.CHURCH_MOUSE;
 			}
-		setModel();
 		saveData();
+		loadData();
 		}
 	
 	public void setModel()
@@ -128,11 +128,11 @@ public class EntityFurby extends EntityTameable
 	
 	public void saveData()
 		{dataManager.set(SPAWN, Biome.getIdForBiome(spawn_biome));
-		dataManager.set(SKIN, skin.toString());
+		dataManager.set(SKIN, RenderFurby.TEXTURES_STRING.inverse().get(skin));
 		}
 	
 	public void loadData()
-		{skin= new ResourceLocation(dataManager.get(SKIN));
+		{skin= RenderFurby.TEXTURES_STRING.get(dataManager.get(SKIN));
 		spawn_biome= Biome.getBiomeForId(dataManager.get(SPAWN));
 		setModel();
 		}
@@ -177,7 +177,7 @@ public class EntityFurby extends EntityTameable
 	    this.dataManager.register(DATA_HEALTH_ID, Float.valueOf(this.getHealth()));
 	    this.dataManager.register(EYE_COLOR, Integer.valueOf(EnumDyeColor.YELLOW.getDyeDamage()));
 	    this.dataManager.register(SPAWN, Biome.getIdForBiome(Biomes.PLAINS));
-	    this.dataManager.register(SKIN, "scfc:textures/enitity/church_mouse.png");
+	    this.dataManager.register(SKIN, "church_mouse");
 	    }
 	
 	@Override
@@ -447,6 +447,11 @@ public class EntityFurby extends EntityTameable
 
     public void setEyeColor(EnumDyeColor _color)
     	{//Set eye colour
-    	dataManager.set(EYE_COLOR, Integer.valueOf(_color.getDyeDamage()));
+    	if (_color!= null)
+    		{dataManager.set(EYE_COLOR, Integer.valueOf(_color.getDyeDamage()));
+    		}
+    	else
+    		{System.out.println("Null color passed!");
+    		}
     	}
 	}

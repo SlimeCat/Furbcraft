@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import com.slimecat23.furbcraft.entity.EntityFurby;
 import com.slimecat23.furbcraft.entity.model.ModelFurbyMane;
 import com.slimecat23.furbcraft.entity.model.ModelFurbySkinless;
@@ -42,6 +44,7 @@ public class RenderFurby extends RenderLiving<EntityFurby>
 	public static final ModelFurbySkinless SKIN= new ModelFurbySkinless();
 		//biome based skin selector
 	public static final HashMap<Biome, ArrayList<ResourceLocation>> TEXTURES= new HashMap<Biome, ArrayList<ResourceLocation>>();
+	public static final BiMap<String, ResourceLocation> TEXTURES_STRING= HashBiMap.create();
 	public static final HashMap<ResourceLocation, ModelBase> MODELS= new HashMap<ResourceLocation, ModelBase>();
 	public static final HashMap<ResourceLocation, EnumDyeColor> EYES= new HashMap<ResourceLocation, EnumDyeColor>();
 	public ResourceLocation skin;
@@ -51,6 +54,15 @@ public class RenderFurby extends RenderLiving<EntityFurby>
 	public RenderFurby(RenderManager _manager)
 		{super(_manager, new ModelFurbyTail(), 0.5F);
 		this.addLayer(new LayerFurbyEye(this));
+		//texture hash filling
+		TEXTURES_STRING.put("church_mouse", CHURCH_MOUSE);
+		TEXTURES_STRING.put("witches_cat", WITCHES_CAT);
+		TEXTURES_STRING.put("wolf", WOLF);
+		TEXTURES_STRING.put("skunk", SKUNK);
+		TEXTURES_STRING.put("leopard", LEOPARD);
+		TEXTURES_STRING.put("snowball", SNOWBALL);
+		TEXTURES_STRING.put("kid_cuisine", KC);
+		TEXTURES_STRING.put("skinless", SKINLESS);
 		//model hash filling
 		MODELS.put(SNOWBALL, TAIL);
 		MODELS.put(LEOPARD, TAIL);
@@ -202,8 +214,10 @@ public class RenderFurby extends RenderLiving<EntityFurby>
 	
 	@Override
 	public void doRender(EntityFurby _entity, double _x, double _y, double _z, float _entityYaw, float _partialTicks)
-		{this.mainModel= _entity.model;
-		super.doRender(_entity, _x, _y, _z, _entityYaw, _partialTicks);
+		{if (_entity.model!= null)
+			{this.mainModel= _entity.model;
+			super.doRender(_entity, _x, _y, _z, _entityYaw, _partialTicks);
+			}
 		}
 	
 	@Override
