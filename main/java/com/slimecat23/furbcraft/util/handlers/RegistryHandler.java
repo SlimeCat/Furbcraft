@@ -56,7 +56,7 @@ public class RegistryHandler
 		}
 	
 	public static void initRegistries(FMLInitializationEvent event)
-		{	
+		{SoundsHandler.registerSounds();
 		}
 	
 	public static void postInitRegistries(FMLPostInitializationEvent event)

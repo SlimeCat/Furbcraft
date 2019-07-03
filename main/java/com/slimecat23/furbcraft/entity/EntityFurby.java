@@ -9,7 +9,9 @@ import com.slimecat23.furbcraft.Main;
 import com.slimecat23.furbcraft.entity.render.RenderFurby;
 import com.slimecat23.furbcraft.init.ItemInit;
 import com.slimecat23.furbcraft.util.Reference;
+import com.slimecat23.furbcraft.util.handlers.SoundsHandler;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.dispenser.IPosition;
 import net.minecraft.entity.Entity;
@@ -422,22 +424,26 @@ public class EntityFurby extends EntityTameable
         worldIn.spawnEntity(entityitem);
 	    }
 	
-	@Override
-	protected SoundEvent getAmbientSound() 
-		{return super.getAmbientSound();
-		}
-	
-	@Override
-	protected SoundEvent getHurtSound(DamageSource damageSourceIn) 
-		{// TODO Auto-generated method stub
-		return super.getHurtSound(damageSourceIn);
-		}
-	
-	@Override
-	protected SoundEvent getDeathSound() 
-		{// TODO Auto-generated method stub
-		return super.getDeathSound();
-		}
+	 	//Sounds
+	 @Override
+	 protected SoundEvent getAmbientSound()
+	 	{return SoundsHandler.ENTITY_FURBY_AMBIENT;
+	    }
+
+	 @Override
+	 protected SoundEvent getHurtSound(DamageSource damageSourceIn)
+	    {return SoundsHandler.ENTITY_FURBY_HURT;
+	    }
+	 
+	 @Override
+	 protected SoundEvent getDeathSound()
+	    {return SoundsHandler.ENTITY_FURBY_DEATH;
+	    }
+
+	 @Override
+	 protected void playStepSound(BlockPos pos, Block blockIn)
+	 	{this.playSound(SoundEvents.ENTITY_CHICKEN_STEP, 0.15F, 1.0F);
+	    }
 	
 		//colours
 	public EnumDyeColor getEyeColor()

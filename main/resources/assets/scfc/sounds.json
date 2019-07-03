@@ -1,0 +1,18 @@
+{"entity.furby.ambient":
+	{"category": "entity",
+	"subTitle": "entity.furby.ambient",
+	"sounds":[{"name": "scfc:entity/furby/ambient", "stream": "true"}]
+	},
+	
+"entity.furby.hurt":
+	{"category": "entity",
+	"subTitle": "entity.furby.hurt",
+	"sounds":[{"name": "scfc:entity/furby/hurt", "stream": "true"}]
+	},
+	
+"entity.furby.death":
+	{"category": "entity",
+	"subTitle": "entity.furby.death",
+	"sounds":[{"name": "scfc:entity/furby/death", "stream": "true"}]
+	}
+}
